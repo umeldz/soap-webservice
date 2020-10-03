@@ -9,12 +9,16 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import com.in28minutes.courses.CourseDetails;
+import com.in28minutes.courses.DeleteCourseDetailsRequest;
+import com.in28minutes.courses.DeleteCourseDetailsResponse;
 import com.in28minutes.courses.GetAllCourseDetailsRequest;
 import com.in28minutes.courses.GetAllCourseDetailsResponse;
 import com.in28minutes.courses.GetCourseDetailsRequest;
 import com.in28minutes.courses.GetCourseDetailsResponse;
+//import com.in28minutes.courses.Status;
 import com.in28minutes.soap.webservices.soapdemo.soap.bean.Course;
 import com.in28minutes.soap.webservices.soapdemo.soap.service.CourseDetatialsService;
+import com.in28minutes.soap.webservices.soapdemo.soap.service.CourseDetatialsService.Status;
 
 @Endpoint
 public class CourseDetailsEndpoint {
@@ -71,4 +75,20 @@ public class CourseDetailsEndpoint {
 		return mapAllCourseDetails(courses);
 	}
 
+	@PayloadRoot(namespace = "http://in28minutes.com/courses", localPart = "DeleteCourseDetailsRequest")
+	@ResponsePayload
+	public DeleteCourseDetailsResponse DeleteCourseDetailsRequest(@RequestPayload DeleteCourseDetailsRequest request) {
+		 Status status = service.delete(request.getId());
+		 DeleteCourseDetailsResponse response  = new DeleteCourseDetailsResponse();
+		 response.setStatus(mapStatus(status));
+
+		return response;
+	}
+
+	private com.in28minutes.courses.Status mapStatus(Status status) {
+		if(status == Status.FAILURE)
+			return com.in28minutes.courses.Status.FAILURE;
+		
+		return com.in28minutes.courses.Status.SUCCESS;
+	}
 }

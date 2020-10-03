@@ -10,6 +10,10 @@ import com.in28minutes.soap.webservices.soapdemo.soap.bean.Course;
 
 @Component
 public class CourseDetatialsService {
+	
+	public enum Status{
+		SUCCESS, FAILURE
+	}
 
 	private static List<Course> courses = new ArrayList<>();
 
@@ -43,17 +47,17 @@ public class CourseDetatialsService {
 	}
 
 	// deletecourse
-	public int delete(int id) {
+	public Status delete(int id) {
 		Iterator<Course> iterator = courses.iterator();
 		while (iterator.hasNext()) {
 			Course course = iterator.next();
 			if (course.getId() == id) {
 				iterator.remove();
-				return 1;
+				return Status.SUCCESS;
 			}
 
 		}
-		return 0;
+		return Status.FAILURE;
 	}
 	// updating course & new course
 
